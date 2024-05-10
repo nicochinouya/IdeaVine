@@ -1,37 +1,55 @@
-const mongoose = require('mongoose');
+// Importing the required dependencies from the mongoose library
+const { Schema, model, Types } = require('mongoose'); 
+// Defining the User schema with the required fields and their respective data types
+const userSchema = new Schema(
+  {
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+    },
+      // using regular expression to validate email format
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        validate: { 
+          validator: function(v) {
+              return /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(v);
+          }
+      }
+    },
 
-// Define the user schema using the mongoose.Schema constructor
-const userSchema = new mongoose.Schema({
-  // Define the username field with type String, unique, required, and trim properties
-  username: { type: String, unique: true, required: true, trim: true },
-  
-  // Define the email field with type String, required, unique, and match properties
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+    friends:[
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }
+  ],
+    thoughts:[
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Thought',
+    }
+  ],
   },
-  
-  // Define the thoughts field as an array of ObjectIds referencing the 'Thought' model
-  thoughts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Thought' }],
-  
-  // Define the friends field as an array of ObjectIds referencing the 'User' model
-  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
-}, {
-  // Define the options for converting the schema to JSON and object
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+  {
+    toJSON: {
+      virtuals: true, // enables virtual properties to be displayed when a user document is transformed into JSON format
+    },
+    id: false, // disables the default '_id' field in the User model to be returned when calling toJSON() method
+}
+);
+
+// Defining a virtual property 'friendCount' which returns the number of friends in the friends array
+userSchema.virtual('friendCount').get(function(){
+    return this.friends.length;
 });
+// Creating the User model from the userSchema
+const User = model('User',userSchema)
+// Exporting the User model as a module
+module.exports = User
 
-// Define a virtual property 'friendCount' using the 'virtual' method of the userSchema
-userSchema.virtual('friendCount').get(function () {
-  // Return the length of the friends array
-  return this.friends.length;
-});
 
-// Create a User model using the userSchema
-const User = mongoose.model('User', userSchema);
 
-// Export the User model
-module.exports = User;
