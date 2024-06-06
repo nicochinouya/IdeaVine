@@ -2,7 +2,7 @@
 const router = require('express').Router();
 const {
     getAllThoughts, // Function to get all thoughts
-    getThoughtById, // Function to get a thought by its ID
+    getThoughtsById, // Function to get a thought by its ID
     createThought, // Function to create a new thought
     deleteThought, // Function to delete a thought
     updateThoughtById, // Function to update a thought by its ID
@@ -14,7 +14,7 @@ const {
 router.route('/').get(getAllThoughts).post(createThought);
 
 // Define the routes for GET, PUT and DELETE Thoughts
-router.route('/:thoughtId').get(getThoughtById).put(updateThoughtById).delete(deleteThought);
+router.route('/:thoughtId').get(getThoughtsById).put(updateThoughtById).delete(deleteThought);
 
 // Define the route for POST reaction to a Thought
 router.route('/:thoughtId/reactions').post(createReaction);
