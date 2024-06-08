@@ -52,10 +52,7 @@ To install and set up IdeaVine's NoSQL Social Network API, follow these steps:
 4. **Start the Server**:
    ```
    npm start
-   ```
-
-5. **Access the API**: 
-   The API endpoints will be available at `http://localhost:3000`.
+   ``
 
 ---
 
@@ -108,3 +105,6 @@ If you have any questions, suggestions, or feedback, please don't hesitate to re
 
 --- 
 
+## video link
+
+https://www.youtube.com/watch?v=g-voBQKpVfQ
